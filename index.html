@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Noche Perfecta</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #12090a;
+  --rose: #c4636a;
+  --blush: #e8a0a5;
+  --cream: #f5ede8;
+  --muted: #8c5a5e;
+  --gold: #c9a96e;
+  --deep: #2a1a1c;
+  --surface: #1e0f11;
+  --wine: #6b1a2a;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--cream); font-family:'Cormorant Garamond',serif; min-height:100vh; overflow-x:hidden; }
+body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:999; opacity:0.4; }
+
+/* COVER */
+#cover { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:48px 24px; text-align:center; background:radial-gradient(ellipse at 50% 20%, #4a1520 0%, #1a0810 50%, var(--bg) 100%); position:relative; }
+#cover::after { content:''; position:absolute; inset:0; background:radial-gradient(circle at 80% 80%, rgba(196,99,106,0.1) 0%, transparent 60%); pointer-events:none; }
+.cover-badge { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.4em; text-transform:uppercase; color:var(--muted); border:1px solid rgba(196,99,106,0.3); padding:6px 20px; margin-bottom:48px; display:inline-block; position:relative; z-index:1; opacity:0; animation:fadeUp 0.8s ease 0.2s forwards; }
+.cover-pre { font-family:'Cormorant Garamond',serif; font-size:clamp(18px,5vw,28px); font-weight:300; font-style:italic; color:var(--blush); display:block; position:relative; z-index:1; opacity:0; animation:fadeUp 0.8s ease 0.5s forwards; margin-bottom:4px; }
+.cover-title { font-family:'Playfair Display',serif; font-size:clamp(52px,17vw,120px); font-weight:700; color:var(--cream); line-height:0.85; letter-spacing:-3px; display:block; position:relative; z-index:1; opacity:0; animation:fadeUp 0.8s ease 0.7s forwards; }
+.cover-title2 { font-family:'Playfair Display',serif; font-size:clamp(36px,11vw,80px); font-weight:400; font-style:italic; color:var(--gold); display:block; position:relative; z-index:1; opacity:0; animation:fadeUp 0.8s ease 0.9s forwards; margin-bottom:8px; }
+.cover-ornament { font-size:18px; color:rgba(196,99,106,0.3); letter-spacing:0.8em; display:block; margin:24px 0; opacity:0; animation:fadeIn 1s ease 1.2s forwards; position:relative; z-index:1; }
+.cover-desc { font-size:clamp(16px,4vw,20px); font-style:italic; color:rgba(245,237,232,0.45); max-width:320px; line-height:1.8; position:relative; z-index:1; opacity:0; animation:fadeUp 0.8s ease 1.4s forwards; margin-bottom:48px; }
+.cover-modules { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:40px; position:relative; z-index:1; opacity:0; animation:fadeUp 0.8s ease 1.6s forwards; }
+.cover-module { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:0.2em; text-transform:uppercase; padding:5px 12px; border:1px solid rgba(196,99,106,0.2); color:var(--muted); }
+.cover-btn { background:transparent; border:1px solid var(--rose); color:var(--cream); font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.25em; text-transform:uppercase; padding:16px 40px; cursor:pointer; transition:all 0.3s; position:relative; z-index:1; opacity:0; animation:fadeUp 0.8s ease 1.8s forwards; }
+.cover-btn:hover { background:var(--rose); color:var(--deep); }
+
+/* NAV */
+#app { display:none; min-height:100vh; flex-direction:column; }
+.top-nav { background:var(--surface); border-bottom:1px solid rgba(196,99,106,0.15); padding:0 16px; display:flex; overflow-x:auto; scrollbar-width:none; gap:0; }
+.top-nav::-webkit-scrollbar { display:none; }
+.nav-tab { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; padding:16px 14px; cursor:pointer; color:var(--muted); border-bottom:2px solid transparent; white-space:nowrap; transition:all 0.2s; background:transparent; border-left:none; border-right:none; border-top:none; }
+.nav-tab.active { color:var(--cream); border-bottom-color:var(--rose); }
+.nav-tab:hover { color:var(--blush); }
+
+/* SECTIONS */
+.section { display:none; flex:1; flex-direction:column; padding:28px 24px 48px; animation:fadeUp 0.4s ease forwards; }
+.section.active { display:flex; }
+.sec-header { margin-bottom:28px; }
+.sec-tag { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.4em; color:var(--rose); text-transform:uppercase; display:block; margin-bottom:8px; }
+.sec-title { font-family:'Playfair Display',serif; font-size:clamp(26px,7vw,42px); color:var(--cream); font-weight:700; line-height:1.1; margin-bottom:8px; }
+.sec-sub { font-size:16px; font-style:italic; color:var(--muted); line-height:1.6; }
+
+/* CARDS */
+.content-card { background:rgba(255,255,255,0.03); border:1px solid rgba(196,99,106,0.15); padding:22px 20px; margin-bottom:14px; }
+.content-card.highlight { border-color:rgba(196,99,106,0.35); background:rgba(196,99,106,0.06); }
+.card-eyebrow { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:0.3em; text-transform:uppercase; color:var(--rose); margin-bottom:10px; display:block; }
+.card-title { font-family:'Playfair Display',serif; font-size:clamp(18px,5vw,24px); font-weight:700; color:var(--cream); margin-bottom:8px; font-style:italic; }
+.card-text { font-size:15px; font-style:italic; color:rgba(245,237,232,0.7); line-height:1.7; }
+.card-tag { display:inline-block; font-family:'Space Mono',monospace; font-size:8px; letter-spacing:0.2em; text-transform:uppercase; padding:4px 10px; border:1px solid rgba(201,169,110,0.3); color:var(--gold); margin-top:10px; margin-right:6px; }
+
+/* PLAYLIST */
+.playlist-item { display:flex; align-items:center; gap:16px; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.06); }
+.playlist-item:last-child { border-bottom:none; }
+.pl-num { font-family:'Space Mono',monospace; font-size:10px; color:var(--muted); width:20px; flex-shrink:0; }
+.pl-info { flex:1; }
+.pl-song { font-family:'Playfair Display',serif; font-size:16px; font-style:italic; color:var(--cream); display:block; margin-bottom:2px; }
+.pl-artist { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); }
+.pl-vibe { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:0.15em; text-transform:uppercase; padding:3px 8px; border:1px solid rgba(196,99,106,0.2); color:var(--muted); flex-shrink:0; }
+
+/* RECIPE */
+.recipe-card { background:rgba(255,255,255,0.03); border:1px solid rgba(196,99,106,0.15); padding:24px 20px; margin-bottom:16px; }
+.recipe-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
+.recipe-title { font-family:'Playfair Display',serif; font-size:clamp(18px,5vw,24px); font-style:italic; color:var(--cream); }
+.recipe-meta { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); text-align:right; }
+.recipe-divider { height:1px; background:rgba(196,99,106,0.15); margin:14px 0; }
+.recipe-section-title { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:0.3em; text-transform:uppercase; color:var(--rose); margin-bottom:10px; display:block; }
+.recipe-list { list-style:none; display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+.recipe-list li { font-size:14px; font-style:italic; color:rgba(245,237,232,0.7); padding-left:16px; position:relative; }
+.recipe-list li::before { content:'·'; position:absolute; left:4px; color:var(--rose); }
+.recipe-steps { display:flex; flex-direction:column; gap:10px; }
+.recipe-step { display:flex; gap:12px; align-items:flex-start; }
+.step-num { font-family:'Space Mono',monospace; font-size:9px; color:var(--rose); flex-shrink:0; padding-top:2px; }
+.step-text { font-size:14px; font-style:italic; color:rgba(245,237,232,0.7); line-height:1.6; }
+
+/* ACTIVITIES */
+.activity-card { background:rgba(255,255,255,0.03); border:1px solid rgba(196,99,106,0.15); padding:20px; margin-bottom:12px; display:flex; gap:16px; align-items:flex-start; }
+.act-icon { font-size:28px; flex-shrink:0; }
+.act-info h3 { font-family:'Playfair Display',serif; font-size:18px; font-style:italic; color:var(--cream); margin-bottom:6px; }
+.act-info p { font-size:14px; font-style:italic; color:rgba(245,237,232,0.65); line-height:1.6; }
+.act-time { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-top:8px; display:block; }
+
+/* SURPRISES */
+.surprise-card { background:rgba(201,169,110,0.06); border:1px solid rgba(201,169,110,0.2); padding:20px; margin-bottom:12px; position:relative; overflow:hidden; }
+.surprise-card::before { content:''; position:absolute; top:0; left:0; width:3px; height:100%; background:var(--gold); }
+.surp-icon { font-size:24px; margin-bottom:10px; display:block; }
+.surp-title { font-family:'Playfair Display',serif; font-size:18px; font-style:italic; color:var(--cream); margin-bottom:6px; }
+.surp-text { font-size:14px; font-style:italic; color:rgba(245,237,232,0.65); line-height:1.6; }
+.surp-tip { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.15em; color:var(--gold); margin-top:10px; display:block; }
+
+/* TIMELINE */
+.timeline { display:flex; flex-direction:column; gap:0; }
+.tl-item { display:flex; gap:16px; }
+.tl-left { display:flex; flex-direction:column; align-items:center; }
+.tl-time { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.2em; color:var(--rose); white-space:nowrap; padding-top:2px; width:44px; }
+.tl-line { width:1px; background:rgba(196,99,106,0.2); flex:1; margin:4px 0; min-height:20px; }
+.tl-dot { width:8px; height:8px; border-radius:50%; background:var(--rose); flex-shrink:0; margin-top:4px; }
+.tl-content { padding-bottom:20px; flex:1; }
+.tl-title { font-family:'Playfair Display',serif; font-size:16px; font-style:italic; color:var(--cream); margin-bottom:4px; }
+.tl-desc { font-size:13px; font-style:italic; color:rgba(245,237,232,0.55); line-height:1.6; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div id="cover">
+  <span class="cover-badge">Una experiencia para parejas</span>
+  <span class="cover-pre">la</span>
+  <span class="cover-title">NOCHE</span>
+  <span class="cover-title2">perfecta</span>
+  <span class="cover-ornament">♥ ♥ ♥</span>
+  <p class="cover-desc">Todo lo que necesitan para crear una noche que no van a olvidar — en casa, esta noche.</p>
+  <div class="cover-modules">
+    <span class="cover-module">🎵 Playlist</span>
+    <span class="cover-module">🍽️ Menú</span>
+    <span class="cover-module">✨ Actividades</span>
+    <span class="cover-module">🎁 Sorpresas</span>
+    <span class="cover-module">🕯️ Ambiente</span>
+  </div>
+  <button class="cover-btn" onclick="startApp()">Comenzar la noche →</button>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="top-nav">
+    <button class="nav-tab active" onclick="switchTab('timeline')">🕯️ La noche</button>
+    <button class="nav-tab" onclick="switchTab('playlist')">🎵 Playlist</button>
+    <button class="nav-tab" onclick="switchTab('menu')">🍽️ Menú</button>
+    <button class="nav-tab" onclick="switchTab('actividades')">✨ Actividades</button>
+    <button class="nav-tab" onclick="switchTab('sorpresas')">🎁 Sorpresas</button>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="section active" id="sec-timeline">
+    <div class="sec-header">
+      <span class="sec-tag">El plan completo</span>
+      <h2 class="sec-title">La noche, momento a momento</h2>
+      <p class="sec-sub">Una guía para que nada quede librado al azar — pero todo se sienta espontáneo.</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div><span class="tl-time">18:00</span></div>
+        <div class="tl-content"><div class="tl-title">Preparar el ambiente</div><div class="tl-desc">Velas encendidas, luces tenues, la playlist ya sonando. La habitación o sala preparada antes de que llegue el otro.</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div><span class="tl-time">18:30</span></div>
+        <div class="tl-content"><div class="tl-title">La bienvenida</div><div class="tl-desc">La primera sorpresa del night: una nota escrita a mano esperando en la puerta o en la mesa.</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div><span class="tl-time">19:00</span></div>
+        <div class="tl-content"><div class="tl-title">Aperitivo y la primera copa</div><div class="tl-desc">Sin apuro. La primera copa es para estar, no para hacer. Siéntense, bríndensen, empiecen la playlist suave.</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div><span class="tl-time">19:30</span></div>
+        <div class="tl-content"><div class="tl-title">Cocinar juntos</div><div class="tl-desc">La cena no se pide — se hace juntos. El proceso de cocinar es parte de la noche, no el preludio.</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div><span class="tl-time">20:30</span></div>
+        <div class="tl-content"><div class="tl-title">La cena</div><div class="tl-desc">Mesa puesta, velas encendidas. Sin teléfonos. Sin televisión. Solo los dos y la música de fondo.</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div><span class="tl-time">21:30</span></div>
+        <div class="tl-content"><div class="tl-title">La actividad de la noche</div><div class="tl-desc">Elijan una actividad de la sección ✨ — puede ser una pregunta profunda, un juego, o simplemente seguir hablando.</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div><span class="tl-time">22:30</span></div>
+        <div class="tl-content"><div class="tl-title">El postre y la sorpresa final</div><div class="tl-desc">El momento de la sorpresa guardada. Ver la sección 🎁 para ideas concretas.</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><span class="tl-time">23:00+</span></div>
+        <div class="tl-content"><div class="tl-title">Lo que venga después</div><div class="tl-desc">Sin guía. Sin plan. La noche perfecta termina cuando ustedes deciden que termina.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAYLIST -->
+  <div class="section" id="sec-playlist">
+    <div class="sec-header">
+      <span class="sec-tag">Música para la noche</span>
+      <h2 class="sec-title">La playlist perfecta</h2>
+      <p class="sec-sub">Tres momentos, tres estados de ánimo. Busquen estas canciones en Spotify o YouTube.</p>
+    </div>
+
+    <div class="content-card highlight">
+      <span class="card-eyebrow">Momento 1 — Llegada y aperitivo</span>
+      <p class="card-text" style="margin-bottom:16px">Suave, tranquila, que no compita con la conversación. El ambiente se está construyendo.</p>
+    </div>
+    <div class="playlist-item">
+      <span class="pl-num">01</span>
+      <div class="pl-info"><span class="pl-song">La vie en rose</span><span class="pl-artist">Édith Piaf</span></div>
+      <span class="pl-vibe">Clásico</span>
+    </div>
+    <div class="playlist-item">
+      <span class="pl-num">02</span>
+      <div class="pl-info"><span class="pl-song">The Way You Look Tonight</span><span class="pl-artist">Frank Sinatra</span></div>
+      <span class="pl-vibe">Romance</span>
+    </div>
+    <div class="playlist-item">
+      <span class="pl-num">03</span>
+      <div class="pl-info"><span class="pl-song">Corcovado</span><span class="pl-artist">João Gilberto</span></div>
+      <span class="pl-vibe">Bossa nova</span>
+    </div>
+    <div class="playlist-item">
+      <span class="pl-num">04</span>
+      <div class="pl-info"><span class="pl-song">Clair de lune</span><span class="pl-artist">Debussy</span></div>
+      <span class="pl-vibe">Íntimo</span>
+    </div>
+    <div class="playlist-item" style="margin-bottom:20px">
+      <span class="pl-num">05</span>
+      <div class="pl-info"><span class="pl-song">La llorona</span><span class="pl-artist">Chavela Vargas</span></div>
+      <span class="pl-vibe">Pasión</span>
+    </div>
+
+    <div class="content-card highlight">
+      <span class="card-eyebrow">Momento 2 — Cena</span>
+      <p class="card-text" style="margin-bottom:16px">Un poco más presente, que acompañe sin dominar. La conversación ya fluye sola.</p>
+    </div>
+    <div class="playlist-item">
+      <span class="pl-num">06</span>
+      <div class="pl-info"><span class="pl-song">Quizás, Quizás, Quizás</span><span class="pl-artist">Nat King Cole</span></div>
+      <span class="pl-vibe">Clásico</span>
+    </div>
+    <div class="playlist-item">
+      <span class="pl-num">07</span>
+      <div class="pl-info"><span class="pl-song">Feeling Good</span><span class="pl-artist">Nina Simone</span></div>
+      <span class="pl-vibe">Energía</span>
+    </div>
+    <div class="playlist-item">
+      <span class="pl-num">08</span>
+      <div class="pl-info"><span class="pl-song">El día que me quieras</span><span class="pl-artist">Carlos Gardel</span></div>
+      <span class="pl-vibe">Romance</span>
+    </div>
+    <div class="playlist-item">
+      <span class="pl-num">09</span>
+      <div class="pl-info"><span class="pl-song">Besame Mucho</span><span class="pl-artist">Andrea Bocelli</span></div>
+      <span class="pl-vibe">Pasión</span>
+    </div>
+    <div class="playlist-item" style="margin-bottom:20px">
+      <span class="pl-num">10</span>
+      <div class="pl-info"><span class="pl-song">My Funny Valentine</span><span class="pl-artist">Chet Baker</span></div>
+      <span class="pl-vibe">Jazz</span>
+    </div>
+
+    <div class="content-card highlight">
+      <span class="card-eyebrow">Momento 3 — El resto de la noche</span>
+      <p class="card-text" style="margin-bottom:16px">Más cercana, más íntima. La noche llegó a su mejor momento.</p>
+    </div>
+    <div class="playlist-item">
+      <span class="pl-num">11</span>
+      <div class="pl-info"><span class="pl-song">Unforgettable</span><span class="pl-artist">Nat King Cole</span></div>
+      <span class="pl-vibe">Atemporal</span>
+    </div>
+    <div class="playlist-item">
+      <span class="pl-num">12</span>
+      <div class="pl-info"><span class="pl-song">La mer</span><span class="pl-artist">Charles Trenet</span></div>
+      <span class="pl-vibe">Poético</span>
+    </div>
+    <div class="playlist-item">
+      <span class="pl-num">13</span>
+      <div class="pl-info"><span class="pl-song">Fly Me to the Moon</span><span class="pl-artist">Frank Sinatra</span></div>
+      <span class="pl-vibe">Clásico</span>
+    </div>
+    <div class="playlist-item">
+      <span class="pl-num">14</span>
+      <div class="pl-info"><span class="pl-song">Historia de un amor</span><span class="pl-artist">Luis Miguel</span></div>
+      <span class="pl-vibe">Romance</span>
+    </div>
+    <div class="playlist-item">
+      <span class="pl-num">15</span>
+      <div class="pl-info"><span class="pl-song">At Last</span><span class="pl-artist">Etta James</span></div>
+      <span class="pl-vibe">Eterno</span>
+    </div>
+  </div>
+
+  <!-- MENU -->
+  <div class="section" id="sec-menu">
+    <div class="sec-header">
+      <span class="sec-tag">Para cocinar juntos</span>
+      <h2 class="sec-title">El menú de la noche</h2>
+      <p class="sec-sub">Tres recetas fáciles, elegantes y pensadas para hacer en pareja — no para impresionar, sino para disfrutar el proceso.</p>
+    </div>
+
+    <div class="recipe-card">
+      <div class="recipe-header">
+        <div class="recipe-title">Entrada — Bruschetta de tomate y albahaca</div>
+        <div class="recipe-meta">15 min<br/>Fácil</div>
+      </div>
+      <div class="recipe-divider"></div>
+      <span class="recipe-section-title">Ingredientes</span>
+      <ul class="recipe-list">
+        <li>Pan de campo cortado en rebanadas gruesas</li>
+        <li>4 tomates maduros</li>
+        <li>Albahaca fresca</li>
+        <li>Ajo, aceite de oliva, sal y pimienta</li>
+        <li>Queso parmesano rallado (opcional)</li>
+      </ul>
+      <span class="recipe-section-title">Preparación</span>
+      <div class="recipe-steps">
+        <div class="recipe-step"><span class="step-num">01</span><span class="step-text">Uno tuesta el pan en el horno o plancha hasta que quede dorado.</span></div>
+        <div class="recipe-step"><span class="step-num">02</span><span class="step-text">El otro corta los tomates en cubos pequeños y los mezcla con aceite, sal y albahaca picada.</span></div>
+        <div class="recipe-step"><span class="step-num">03</span><span class="step-text">Froten el pan tostado con ajo crudo. Pongan la mezcla encima.</span></div>
+        <div class="recipe-step"><span class="step-num">04</span><span class="step-text">Un chorrito de aceite de oliva y listo. Coman mientras cocinan el plato principal.</span></div>
+      </div>
+    </div>
+
+    <div class="recipe-card">
+      <div class="recipe-header">
+        <div class="recipe-title">Principal — Pasta al limón con camarones</div>
+        <div class="recipe-meta">25 min<br/>Medio</div>
+      </div>
+      <div class="recipe-divider"></div>
+      <span class="recipe-section-title">Ingredientes</span>
+      <ul class="recipe-list">
+        <li>300g de pasta (linguine o spaghetti)</li>
+        <li>300g de camarones limpios</li>
+        <li>2 limones (jugo y ralladura)</li>
+        <li>3 dientes de ajo</li>
+        <li>Manteca, aceite de oliva, perejil</li>
+        <li>Sal, pimienta, vino blanco (opcional)</li>
+      </ul>
+      <span class="recipe-section-title">Preparación</span>
+      <div class="recipe-steps">
+        <div class="recipe-step"><span class="step-num">01</span><span class="step-text">Cocinan la pasta en agua con sal. Reservan un vaso del agua de cocción.</span></div>
+        <div class="recipe-step"><span class="step-num">02</span><span class="step-text">En una sartén grande, saltean el ajo en aceite de oliva. Agregan los camarones 2 minutos por lado.</span></div>
+        <div class="recipe-step"><span class="step-num">03</span><span class="step-text">Agregan el jugo de limón y un splash de vino blanco si tienen. Dejan reducir 1 minuto.</span></div>
+        <div class="recipe-step"><span class="step-num">04</span><span class="step-text">Incorporan la pasta escurrida y un poco del agua de cocción. Manteca, ralladura de limón y perejil picado.</span></div>
+        <div class="recipe-step"><span class="step-num">05</span><span class="step-text">Sirven de inmediato. Con una copa de vino blanco frío al lado.</span></div>
+      </div>
+    </div>
+
+    <div class="recipe-card">
+      <div class="recipe-header">
+        <div class="recipe-title">Postre — Fresas con crema y chocolate</div>
+        <div class="recipe-meta">10 min<br/>Muy fácil</div>
+      </div>
+      <div class="recipe-divider"></div>
+      <span class="recipe-section-title">Ingredientes</span>
+      <ul class="recipe-list">
+        <li>300g de fresas frescas</li>
+        <li>200ml de crema de leche</li>
+        <li>2 cucharadas de azúcar impalpable</li>
+        <li>100g de chocolate negro</li>
+        <li>Extracto de vainilla</li>
+      </ul>
+      <span class="recipe-section-title">Preparación</span>
+      <div class="recipe-steps">
+        <div class="recipe-step"><span class="step-num">01</span><span class="step-text">Batir la crema con el azúcar y la vainilla hasta que quede firme. Guardar en la heladera.</span></div>
+        <div class="recipe-step"><span class="step-num">02</span><span class="step-text">Derretir el chocolate a baño María o en el microondas en intervalos de 20 segundos.</span></div>
+        <div class="recipe-step"><span class="step-num">03</span><span class="step-text">Lavar las fresas y dejarlas enteras con el tallo para tomar.</span></div>
+        <div class="recipe-step"><span class="step-num">04</span><span class="step-text">Servir en un plato compartido: fresas, crema al lado y chocolate derretido para mojar. Comer juntos del mismo plato.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTIVIDADES -->
+  <div class="section" id="sec-actividades">
+    <div class="sec-header">
+      <span class="sec-tag">Para hacer juntos</span>
+      <h2 class="sec-title">Actividades de la noche</h2>
+      <p class="sec-sub">Elijan una o hagan varias. No tienen que seguir ningún orden.</p>
+    </div>
+
+    <div class="activity-card">
+      <span class="act-icon">🎬</span>
+      <div class="act-info">
+        <h3>Cine mudo</h3>
+        <p>Elijan una película que los dos quieran ver — pero con el volumen apagado. Inventen los diálogos juntos mientras transcurre.</p>
+        <span class="act-time">⏱ 30-60 minutos</span>
+      </div>
+    </div>
+    <div class="activity-card">
+      <span class="act-icon">✍️</span>
+      <div class="act-info">
+        <h3>La lista de los 10</h3>
+        <p>Cada uno escribe en un papel las 10 cosas que más le gustan del otro. Se intercambian al mismo tiempo y las leen en silencio.</p>
+        <span class="act-time">⏱ 15-20 minutos</span>
+      </div>
+    </div>
+    <div class="activity-card">
+      <span class="act-icon">🎵</span>
+      <div class="act-info">
+        <h3>DJ por turnos</h3>
+        <p>Cada uno elige 5 canciones que quiere que el otro escuche esta noche. Se turnan, y por cada canción explican por qué la eligieron.</p>
+        <span class="act-time">⏱ 30-40 minutos</span>
+      </div>
+    </div>
+    <div class="activity-card">
+      <span class="act-icon">🗺️</span>
+      <div class="act-info">
+        <h3>El próximo viaje</h3>
+        <p>Elijan un destino al que les gustaría ir juntos y planifíquenlo en detalle — aunque sea imaginario. ¿Cuándo? ¿Qué harían? ¿Dónde dormirían?</p>
+        <span class="act-time">⏱ 20-30 minutos</span>
+      </div>
+    </div>
+    <div class="activity-card">
+      <span class="act-icon">💬</span>
+      <div class="act-info">
+        <h3>La pregunta que nunca hicieron</h3>
+        <p>Cada uno piensa en una pregunta que siempre quiso hacerle al otro pero nunca se animó. Esta noche la hacen.</p>
+        <span class="act-time">⏱ Sin límite</span>
+      </div>
+    </div>
+    <div class="activity-card">
+      <span class="act-icon">⭐</span>
+      <div class="act-info">
+        <h3>Mirar las estrellas</h3>
+        <p>Si pueden, salgan 15 minutos afuera — al balcón, al jardín, a la vereda. Miren el cielo sin hablar. Solo estar juntos mirando lo mismo.</p>
+        <span class="act-time">⏱ 15 minutos</span>
+      </div>
+    </div>
+    <div class="activity-card">
+      <span class="act-icon">📸</span>
+      <div class="act-info">
+        <h3>La foto favorita</h3>
+        <p>Cada uno busca en su teléfono la foto favorita que tiene del otro — no la más linda, la favorita. La muestran y explican por qué.</p>
+        <span class="act-time">⏱ 15 minutos</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SORPRESAS -->
+  <div class="section" id="sec-sorpresas">
+    <div class="sec-header">
+      <span class="sec-tag">Detalles que cambian todo</span>
+      <h2 class="sec-title">Las sorpresas</h2>
+      <p class="sec-sub">No tienen que hacer todas. Con una o dos, la noche ya es diferente.</p>
+    </div>
+
+    <div class="surprise-card">
+      <span class="surp-icon">✉️</span>
+      <div class="surp-title">La nota de bienvenida</div>
+      <p class="surp-text">Escribile una nota a mano antes de que empiece la noche. Puede ser una sola línea. Dejala en un lugar que encuentre al llegar — la mesa, el espejo del baño, la almohada.</p>
+      <span class="surp-tip">→ No hagas que sea perfecta. Que sea tuya.</span>
+    </div>
+    <div class="surprise-card">
+      <span class="surp-icon">🕯️</span>
+      <div class="surp-title">El camino de velas</div>
+      <p class="surp-text">Comprá 5 o 6 velas pequeñas y formá un camino desde la entrada hasta donde van a cenar. No tiene que ser elaborado — la intención transforma cualquier espacio.</p>
+      <span class="surp-tip">→ Las velas de té son baratas y funcionan perfecto.</span>
+    </div>
+    <div class="surprise-card">
+      <span class="surp-icon">🥂</span>
+      <div class="surp-title">El brindis con historia</div>
+      <p class="surp-text">Al servir la primera copa, propongan un brindis que no sea "salud". Que cada uno diga una cosa específica que le agradece al otro este año.</p>
+      <span class="surp-tip">→ Dos frases honestas valen más que mil palabras de brindis.</span>
+    </div>
+    <div class="surprise-card">
+      <span class="surp-icon">🎁</span>
+      <div class="surp-title">El regalo sin ocasión</div>
+      <p class="surp-text">No tiene que costar dinero. Puede ser un libro que saben que el otro quería, su snack favorito, o algo que hiciste a mano. La sorpresa no es el objeto — es el gesto.</p>
+      <span class="surp-tip">→ "Te traje esto porque pensé en vos" no necesita más contexto.</span>
+    </div>
+    <div class="surprise-card">
+      <span class="surp-icon">💌</span>
+      <div class="surp-title">La memoria del año</div>
+      <p class="surp-text">Durante la cena, cada uno cuenta el momento del último año en que más se sintió enamorado/a del otro. Sin preparación, sin pensar demasiado — el primero que venga.</p>
+      <span class="surp-tip">→ Esta suele ser la conversación más linda de la noche.</span>
+    </div>
+    <div class="surprise-card">
+      <span class="surp-icon">🌹</span>
+      <div class="surp-title">Una flor, no un ramo</div>
+      <p class="surp-text">Una sola flor en un vaso, esperando en la mesa. No hace falta gastar en un ramo — una flor con intención dice exactamente lo mismo.</p>
+      <span class="surp-tip">→ Con una nota al lado que diga por qué esa flor, todavía mejor.</span>
+    </div>
+  </div>
+</div>
+
+<script>
+function startApp() {
+  document.getElementById('cover').style.display='none';
+  const app=document.getElementById('app');
+  app.style.display='flex';
+  app.style.flexDirection='column';
+  window.scrollTo(0,0);
+}
+
+function switchTab(id) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
+
